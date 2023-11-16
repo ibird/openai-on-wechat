@@ -20,17 +20,10 @@ func MessageHandler(msg *openwechat.Message) {
 	}
 	ctx := context.Background()
 	systemPrompt := config.Prompt
-	switch {
-	case strings.HasPrefix(msg.Content, config.C.WechatConfig.TextConfig.TriggerPrefix):
-		// 文字回复
-		if config.C.ContextConfig.SwitchOn {
-			go textSessionReplyHandler(ctx, msg, config.C.WechatConfig.TextConfig.TriggerPrefix, openai.GPT3Dot5Turbo, systemPrompt)
-		} else {
-			go textReplyHandler(ctx, msg, config.C.WechatConfig.TextConfig.TriggerPrefix, openai.GPT3Dot5Turbo, systemPrompt)
-		}
-	case strings.HasPrefix(msg.Content, config.C.WechatConfig.ImageConfig.TriggerPrefix):
-		// 图片回复
-		go imageReplyHandler(ctx, msg, config.C.WechatConfig.ImageConfig.TriggerPrefix)
+	if config.C.ContextConfig.SwitchOn {
+		go textSessionReplyHandler(ctx, msg, config.C.WechatConfig.TextConfig.TriggerPrefix, openai.GPT3Dot5Turbo, systemPrompt)
+	} else {
+		go textReplyHandler(ctx, msg, config.C.WechatConfig.TextConfig.TriggerPrefix, openai.GPT3Dot5Turbo, systemPrompt)
 	}
 }
 
